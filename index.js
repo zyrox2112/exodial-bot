@@ -1,0 +1,865 @@
+require('dotenv').config();
+
+const config = require('./config.json');
+
+const {
+    Client,
+    GatewayIntentBits,
+    Partials,
+    PermissionsBitField,
+    ChannelType,
+
+    EmbedBuilder,
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+
+    ModalBuilder,
+    TextInputBuilder,
+    TextInputStyle,
+
+    SlashCommandBuilder,
+    REST,
+    Routes,
+
+    Events
+} = require('discord.js');
+
+const client = new Client({
+
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMembers
+    ],
+
+    partials: [
+        Partials.Channel
+    ]
+});
+
+let ticketCounter = 1;
+
+const slashCommands = [
+
+    new SlashCommandBuilder()
+        .setName('help')
+        .setDescription('Muestra la ayuda'),
+
+    new SlashCommandBuilder()
+        .setName('say')
+        .setDescription('Enviar mensaje')
+        .addStringOption(option =>
+            option.setName('mensaje')
+                .setDescription('Mensaje')
+                .setRequired(true)
+        ),
+
+    new SlashCommandBuilder()
+        .setName('embed')
+        .setDescription('Enviar embed')
+        .addStringOption(option =>
+            option.setName('mensaje')
+                .setDescription('Mensaje')
+                .setRequired(true)
+        ),
+
+    new SlashCommandBuilder()
+        .setName('rename')
+        .setDescription('Renombrar ticket')
+        .addStringOption(option =>
+            option.setName('nombre')
+                .setDescription('Nuevo nombre')
+                .setRequired(true)
+        ),
+
+    new SlashCommandBuilder()
+        .setName('nick')
+        .setDescription('Cambiar apodo')
+        .addUserOption(option =>
+            option.setName('usuario')
+                .setDescription('Usuario')
+                .setRequired(true)
+        )
+        .addStringOption(option =>
+            option.setName('apodo')
+                .setDescription('Nuevo apodo')
+                .setRequired(true)
+        )
+];
+
+client.once('ready', async () => {
+
+    console.log(`✅ ${client.user.tag} online`);
+
+    client.user.setPresence({
+        activities: [
+            {
+                name: 'Exødial Støck',
+                type: 3
+            }
+        ],
+
+        status: 'online'
+    });
+
+    const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
+
+    try {
+
+        await rest.put(
+            Routes.applicationCommands(process.env.CLIENT_ID),
+            {
+                body: slashCommands
+            }
+        );
+
+        console.log('✅ Slash commands cargados');
+
+    } catch (error) {
+
+        console.log(error);
+    }
+
+    const ticketChannel = client.channels.cache.get(config.ticketsChannel);
+
+    if (ticketChannel) {
+
+        const messages = await ticketChannel.messages.fetch({ limit: 20 });
+
+        const botMessages = messages.filter(msg =>
+            msg.author.id === client.user.id
+        );
+
+        if (botMessages.size > 0) {
+
+            await ticketChannel.bulkDelete(botMessages, true).catch(() => {});
+        }
+
+        const embed = new EmbedBuilder()
+
+            .setColor(config.color)
+
+            .setTitle('🏷️ Ticket | System - Exødial')
+
+            .setDescription(`
+🇪🇸 · Hola! para abrir un ticket, debes presionar uno de los siguientes botones.
+
+🇺🇸 · Hello! To open a ticket, you must press one of the following buttons.
+
+© Exødial - Todos los derechos reservados.
+            `)
+
+            .setFooter({
+                text: 'Exødial Gestion'
+            });
+
+        const row1 = new ActionRowBuilder()
+
+            .addComponents(
+
+                new ButtonBuilder()
+                    .setCustomId('ticket_compra')
+                    .setLabel('Compra')
+                    .setEmoji('🛒')
+                    .setStyle(ButtonStyle.Secondary),
+
+                new ButtonBuilder()
+                    .setCustomId('ticket_soporte')
+                    .setLabel('Soporte')
+                    .setEmoji('🎧')
+                    .setStyle(ButtonStyle.Secondary)
+            );
+
+        const row2 = new ActionRowBuilder()
+
+            .addComponents(
+
+                new ButtonBuilder()
+                    .setCustomId('ticket_partner')
+                    .setLabel('Partner')
+                    .setEmoji('🔗')
+                    .setStyle(ButtonStyle.Secondary)
+            );
+
+        await ticketChannel.send({
+
+            embeds: [embed],
+
+            components: [row1, row2]
+        });
+    }
+});
+
+function isStaff(member) {
+
+    return member.roles.cache.has(config.staffRole);
+}
+
+client.on('guildMemberAdd', async member => {
+
+    // CANAL BIENVENIDAS
+
+    const channel = member.guild.channels.cache.get(config.welcomeChannel);
+
+    if (!channel) return;
+
+    // CANAL TAG
+
+    const tagChannel = member.guild.channels.cache.get('1494781988056600676');
+
+    // TAG AUTOMÁTICO
+
+    if (tagChannel) {
+
+        const pingMessage = await tagChannel.send(`${member}`);
+
+        setTimeout(async () => {
+
+            await pingMessage.delete().catch(() => {});
+
+        }, 1000);
+    }
+
+    // BIENVENIDA
+
+    const createdTimestamp = Math.floor(member.user.createdTimestamp / 1000);
+
+    const joinedTimestamp = Math.floor(Date.now() / 1000);
+
+    const embed = new EmbedBuilder()
+
+        .setColor(config.color)
+
+        .setAuthor({
+            name: `${member.user.tag}`,
+            iconURL: member.user.displayAvatarURL({ dynamic: true })
+        })
+
+        .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
+
+        .setTitle('👋 Bienvenido/a a Exødial Støck')
+
+        .setDescription(`
+Esperamos que disfrutes tu estadía dentro del servidor ✨
+        `)
+
+        .addFields(
+
+            {
+                name: '👤 Usuario',
+                value: `${member}`,
+                inline: true
+            },
+
+            {
+                name: '📅 Cuenta creada',
+                value: `<t:${createdTimestamp}:R>`,
+                inline: true
+            },
+
+            {
+                name: '📥 Entró al servidor',
+                value: `<t:${joinedTimestamp}:R>`,
+                inline: true
+            },
+
+            {
+                name: '📈 Miembros',
+                value: `${member.guild.memberCount}`,
+                inline: true
+            }
+        )
+
+        .setFooter({
+            text: 'Exødial Gestion'
+        })
+
+        .setTimestamp();
+
+    channel.send({
+        content: `${member}`,
+        embeds: [embed]
+    });
+});
+
+client.on('messageCreate', async message => {
+
+    if (message.author.bot) return;
+
+    if (!message.content.startsWith(config.prefix)) return;
+
+    const args = message.content.slice(config.prefix.length).trim().split(/ +/);
+
+    const cmd = args.shift()?.toLowerCase();
+
+    if (cmd === 'help') {
+
+        const embed = new EmbedBuilder()
+
+            .setColor(config.color)
+
+            .setTitle('📘 Exødial Gestion')
+
+            .setDescription(`
+Sistema de gestión para **${config.serverName}**
+            `)
+
+            .addFields(
+
+                {
+                    name: '🎫 Tickets',
+                    value:
+`e!rename`,
+                    inline: false
+                },
+
+                {
+                    name: '📢 General',
+                    value:
+`e!help
+e!say
+e!embed`,
+                    inline: false
+                },
+
+                {
+                    name: '👤 Usuarios',
+                    value:
+`e!nick`,
+                    inline: false
+                }
+            )
+
+            .setFooter({
+                text: 'Exødial Gestion'
+            })
+
+            .setTimestamp();
+
+        return message.reply({
+            embeds: [embed]
+        });
+    }
+
+    if (cmd === 'say') {
+
+        if (!isStaff(message.member)) {
+
+            return message.reply('❌ No tienes permisos.');
+        }
+
+        const text = args.join(' ');
+
+        if (!text) {
+
+            return message.reply('❌ Escribe un mensaje.');
+        }
+
+        await message.delete().catch(() => {});
+
+        return message.channel.send(text);
+    }
+
+    if (cmd === 'embed') {
+
+        if (!isStaff(message.member)) {
+
+            return message.reply('❌ No tienes permisos.');
+        }
+
+        const text = args.join(' ');
+
+        if (!text) {
+
+            return message.reply('❌ Escribe un mensaje.');
+        }
+
+        await message.delete().catch(() => {});
+
+        const embed = new EmbedBuilder()
+
+            .setColor(config.color)
+
+            .setDescription(text)
+
+            .setTimestamp();
+
+        return message.channel.send({
+            embeds: [embed]
+        });
+    }
+
+    if (cmd === 'rename') {
+
+        if (!isStaff(message.member)) {
+
+            return message.reply('❌ No tienes permisos.');
+        }
+
+        const name = args.join('-');
+
+        if (!name) {
+
+            return message.reply('❌ Escribe un nombre.');
+        }
+
+        await message.channel.setName(name);
+
+        return message.reply(`✅ Ticket renombrado a ${name}`);
+    }
+
+    if (cmd === 'nick') {
+
+        if (!isStaff(message.member)) {
+
+            return message.reply('❌ No tienes permisos.');
+        }
+
+        const user = message.mentions.members.first();
+
+        if (!user) {
+
+            return message.reply('❌ Menciona un usuario.');
+        }
+
+        args.shift();
+
+        const nickname = args.join(' ');
+
+        if (!nickname) {
+
+            return message.reply('❌ Escribe un apodo.');
+        }
+
+        await user.setNickname(nickname);
+
+        return message.reply(`✅ Apodo cambiado.`);
+    }
+});
+
+client.on(Events.InteractionCreate, async interaction => {
+
+    if (interaction.isChatInputCommand()) {
+
+        if (interaction.commandName === 'help') {
+
+            const embed = new EmbedBuilder()
+
+                .setColor(config.color)
+
+                .setTitle('📘 Exødial Gestion')
+
+                .setDescription(`
+Sistema de gestión para **${config.serverName}**
+                `)
+
+                .addFields(
+
+                    {
+                        name: '🎫 Tickets',
+                        value:
+`/rename`,
+                        inline: false
+                    },
+
+                    {
+                        name: '📢 General',
+                        value:
+`/help
+/say
+/embed`,
+                        inline: false
+                    },
+
+                    {
+                        name: '👤 Usuarios',
+                        value:
+`/nick`,
+                        inline: false
+                    }
+                )
+
+                .setFooter({
+                    text: 'Exødial Gestion'
+                })
+
+                .setTimestamp();
+
+            return interaction.reply({
+                embeds: [embed]
+            });
+        }
+
+        if (interaction.commandName === 'say') {
+
+            if (!isStaff(interaction.member)) {
+
+                return interaction.reply({
+                    content: '❌ No tienes permisos.',
+                    ephemeral: true
+                });
+            }
+
+            const text = interaction.options.getString('mensaje');
+
+            return interaction.reply({
+                content: text
+            });
+        }
+
+        if (interaction.commandName === 'embed') {
+
+            if (!isStaff(interaction.member)) {
+
+                return interaction.reply({
+                    content: '❌ No tienes permisos.',
+                    ephemeral: true
+                });
+            }
+
+            const text = interaction.options.getString('mensaje');
+
+            const embed = new EmbedBuilder()
+
+                .setColor(config.color)
+
+                .setDescription(text)
+
+                .setTimestamp();
+
+            return interaction.reply({
+                embeds: [embed]
+            });
+        }
+
+        if (interaction.commandName === 'rename') {
+
+            if (!isStaff(interaction.member)) {
+
+                return interaction.reply({
+                    content: '❌ No tienes permisos.',
+                    ephemeral: true
+                });
+            }
+
+            const name = interaction.options.getString('nombre');
+
+            await interaction.channel.setName(name);
+
+            return interaction.reply(`✅ Ticket renombrado.`);
+        }
+
+        if (interaction.commandName === 'nick') {
+
+            if (!isStaff(interaction.member)) {
+
+                return interaction.reply({
+                    content: '❌ No tienes permisos.',
+                    ephemeral: true
+                });
+            }
+
+            const user = interaction.options.getMember('usuario');
+
+            const nickname = interaction.options.getString('apodo');
+
+            await user.setNickname(nickname);
+
+            return interaction.reply(`✅ Apodo cambiado.`);
+        }
+    }
+
+    if (interaction.isButton()) {
+
+        if (
+            interaction.customId === 'ticket_compra' ||
+            interaction.customId === 'ticket_soporte' ||
+            interaction.customId === 'ticket_partner'
+        ) {
+
+            let type = '';
+
+            if (interaction.customId === 'ticket_compra') {
+                type = 'Compra';
+            }
+
+            if (interaction.customId === 'ticket_soporte') {
+                type = 'Soporte';
+            }
+
+            if (interaction.customId === 'ticket_partner') {
+                type = 'Partner';
+            }
+
+            const modal = new ModalBuilder()
+
+                .setCustomId(`modal_${type}`)
+
+                .setTitle(`${type} | Exødial`);
+
+            const input1 = new TextInputBuilder()
+
+                .setCustomId('q1')
+
+                .setLabel(
+                    type === 'Compra'
+                        ? '¿Qué quieres comprar?'
+                        : type === 'Soporte'
+                        ? '¿Qué necesitas resolver?'
+                        : '¿Cuántos miembros tienen?'
+                )
+
+                .setStyle(TextInputStyle.Short)
+
+                .setRequired(true);
+
+            const input2 = new TextInputBuilder()
+
+                .setCustomId('q2')
+
+                .setLabel(
+                    type === 'Compra'
+                        ? '¿Qué método de pago usas?'
+                        : type === 'Soporte'
+                        ? 'Explica el problema'
+                        : '¿De qué trata su servidor?'
+                )
+
+                .setStyle(TextInputStyle.Paragraph)
+
+                .setRequired(true);
+
+            const row1 = new ActionRowBuilder().addComponents(input1);
+
+            const row2 = new ActionRowBuilder().addComponents(input2);
+
+            modal.addComponents(row1, row2);
+
+            return interaction.showModal(modal);
+        }
+
+        if (interaction.customId === 'close_ticket') {
+
+            if (!isStaff(interaction.member)) {
+
+                return interaction.reply({
+
+                    content: '❌ No tienes permisos.',
+
+                    ephemeral: true
+                });
+            }
+
+            await interaction.reply('🔒 Cerrando ticket...');
+
+            setTimeout(() => {
+
+                interaction.channel.delete();
+
+            }, 3000);
+        }
+
+        if (interaction.customId === 'claim_ticket') {
+
+            if (!isStaff(interaction.member)) {
+
+                return interaction.reply({
+
+                    content: '❌ No tienes permisos.',
+
+                    ephemeral: true
+                });
+            }
+
+            const embed = new EmbedBuilder()
+
+                .setColor(config.color)
+
+                .setDescription(`✅ Ticket reclamado por ${interaction.user}`);
+
+            return interaction.reply({
+                embeds: [embed]
+            });
+        }
+
+        if (interaction.customId === 'notify_ticket') {
+
+            return interaction.reply({
+                content: `<@&${config.staffRole}>`,
+                allowedMentions: {
+                    roles: [config.staffRole]
+                }
+            });
+        }
+    }
+
+    if (interaction.isModalSubmit()) {
+
+        const type = interaction.customId.replace('modal_', '');
+
+        const q1 = interaction.fields.getTextInputValue('q1');
+
+        const q2 = interaction.fields.getTextInputValue('q2');
+
+        const channel = await interaction.guild.channels.create({
+
+            name: `${type.toLowerCase()}-${interaction.user.username}`,
+
+            type: ChannelType.GuildText,
+
+            parent: config.ticketsCategory,
+
+            permissionOverwrites: [
+
+                {
+                    id: interaction.guild.id,
+
+                    deny: [
+                        PermissionsBitField.Flags.ViewChannel
+                    ]
+                },
+
+                {
+                    id: interaction.user.id,
+
+                    allow: [
+                        PermissionsBitField.Flags.ViewChannel,
+                        PermissionsBitField.Flags.SendMessages
+                    ]
+                },
+
+                {
+                    id: config.staffRole,
+
+                    allow: [
+                        PermissionsBitField.Flags.ViewChannel,
+                        PermissionsBitField.Flags.SendMessages
+                    ]
+                }
+            ]
+        });
+
+        ticketCounter++;
+
+        const embed1 = new EmbedBuilder()
+
+            .setColor(config.color)
+
+            .setTitle('Sistema De Tickets')
+
+            .setDescription(`
+¡Bienvenido/a! Un miembro del <@&${config.staffRole}> atenderá tu ticket pronto.
+            `)
+
+            .addFields(
+
+                {
+                    name: '👤 Usuario',
+                    value: `${interaction.user}`,
+                    inline: false
+                },
+
+                {
+                    name: '🎟️ Ticket N°',
+                    value: `${ticketCounter}`,
+                    inline: false
+                },
+
+                {
+                    name: '🏷️ Categoría',
+                    value: `${type}`,
+                    inline: false
+                }
+            )
+
+            .setFooter({
+                text: `Ticket abierto por ${interaction.user.username}`
+            })
+
+            .setTimestamp();
+
+        const row = new ActionRowBuilder()
+
+            .addComponents(
+
+                new ButtonBuilder()
+                    .setCustomId('close_ticket')
+                    .setLabel('Cerrar')
+                    .setEmoji('🔒')
+                    .setStyle(ButtonStyle.Danger),
+
+                new ButtonBuilder()
+                    .setCustomId('claim_ticket')
+                    .setLabel('Reclamar')
+                    .setEmoji('✅')
+                    .setStyle(ButtonStyle.Success),
+
+                new ButtonBuilder()
+                    .setCustomId('notify_ticket')
+                    .setLabel('Notificar')
+                    .setEmoji('📩')
+                    .setStyle(ButtonStyle.Primary)
+            );
+
+        const embed2 = new EmbedBuilder()
+
+            .setColor(config.color)
+
+            .setTitle('📋 Respuestas del Formulario')
+
+            .addFields(
+
+                {
+                    name:
+                        type === 'Compra'
+                            ? '🛒 Producto'
+                            : type === 'Soporte'
+                            ? '🎧 Problema'
+                            : '👥 Miembros',
+
+                    value: q1,
+                    inline: false
+                },
+
+                {
+                    name:
+                        type === 'Compra'
+                            ? '💳 Método de pago'
+                            : type === 'Soporte'
+                            ? '📄 Explicación'
+                            : '🌍 Servidor',
+
+                    value: q2,
+                    inline: false
+                }
+            )
+
+            .setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
+
+            .setFooter({
+                text: `Ticket abierto por ${interaction.user.username}`
+            })
+
+            .setTimestamp();
+
+        await channel.send({
+
+            content: `${interaction.user}`,
+
+            embeds: [embed1, embed2],
+
+            components: [row]
+        });
+
+        return interaction.reply({
+
+            content: `✅ Ticket creado: ${channel}`,
+
+            ephemeral: true
+        });
+    }
+});
+
+client.login(process.env.TOKEN);
