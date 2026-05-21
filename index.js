@@ -195,6 +195,87 @@ client.once('ready', async () => {
             components: [row1, row2]
         });
     }
+    const shopChannel = client.channels.cache.get('1507113224816955534');
+
+if (shopChannel) {
+
+    const shopEmbed = new EmbedBuilder()
+
+        .setColor(config.color)
+
+        .setTitle('🛒 Exødial Stock Shop')
+
+        .setDescription(`
+Selecciona una categoría del menú para ver nuestros productos y precios.
+
+✨ Nitro
+📺 Streaming
+🚀 Boosts
+🎨 Decorations
+💸 Robux
+👥 Members
+📈 Followers
+        `)
+
+        .setFooter({
+            text: 'Exødial Stock'
+        });
+
+    const shopMenu = new StringSelectMenuBuilder()
+
+        .setCustomId('shop_menu')
+
+        .setPlaceholder('Selecciona una categoría')
+
+        .addOptions([
+            {
+                label: 'Nitro',
+                value: 'nitro',
+                emoji: '1495072973449592933'
+            },
+            {
+                label: 'Streaming',
+                value: 'streaming',
+                emoji: '1495087858778902548'
+            },
+            {
+                label: 'Server Boosts',
+                value: 'boosts',
+                emoji: '1495072978860245103'
+            },
+            {
+                label: 'Decorations',
+                value: 'decorations',
+                emoji: '1507110765600047196'
+            },
+            {
+                label: 'Robux',
+                value: 'robux',
+                emoji: '1495072975681097930'
+            },
+            {
+                label: 'Members',
+                value: 'members',
+                emoji: '1507110676991053930'
+            },
+            {
+                label: 'Followers',
+                value: 'followers',
+                emoji: '1495102970302304357'
+            }
+        ]);
+
+    const shopRow = new ActionRowBuilder()
+
+        .addComponents(shopMenu);
+
+    await shopChannel.send({
+
+        embeds: [shopEmbed],
+
+        components: [shopRow]
+    });
+}
 });
 
 function isStaff(member) {
