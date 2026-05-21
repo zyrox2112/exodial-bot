@@ -208,9 +208,11 @@ if (shopChannel) {
     .setThumbnail(client.user.displayAvatarURL())
 
     .setDescription(`
-> ¡Bienvenido/a a nuestro catálogo de productos, en el que podras ver todo acerca de nuestra tienda!
-> Descubre nuestra variedad de productos disponibles y sus respectivos precios.
-> Aceptamos todo tipo de Metodos De Pago, universalmente Crypto y PayPal fyf
+> *¡Bienvenido/a a nuestro catálogo de productos, en el que podras ver todo acerca de nuestra tienda!*
+
+> *Descubre nuestra variedad de productos disponibles y sus respectivos precios.*
+
+> *Aceptamos todo tipo de Metodos De Pago, universalmente Crypto y PayPal fyf*
 ## 🛍️ Nuestros productos:
 
 • <a:NITRO:1495072973449592933> Nitro Boost / Basic
