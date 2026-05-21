@@ -199,27 +199,35 @@ client.once('ready', async () => {
 
 if (shopChannel) {
 
-    const shopEmbed = new EmbedBuilder()
+   const shopEmbed = new EmbedBuilder()
 
-        .setColor(config.color)
+    .setColor('#5865F2')
 
-        .setTitle('🛒 Exødial Stock Shop')
+    .setTitle('🛒 Exodial Stock | Products')
 
-        .setDescription(`
-Selecciona una categoría del menú para ver nuestros productos y precios.
+    .setThumbnail(client.user.displayAvatarURL())
 
-✨ Nitro
-📺 Streaming
-🚀 Boosts
-🎨 Decorations
-💸 Robux
-👥 Members
-📈 Followers
-        `)
+    .setDescription(`
+> ¡Bienvenido a nuestro catálogo de productos!
+> Descubre nuestra variedad de productos disponibles.
 
-        .setFooter({
-            text: 'Exødial Stock'
-        });
+## 🛍️ Nuestros productos:
+
+• <a:NITRO:1495072973449592933> Nitro  
+• <:Netflix6:1495087858778902548> Streaming  
+• <a:server_boost:1495072978860245103> Server Boosts  
+• <:Deco:1507110765600047196> Decorations  
+• <a:Robux:1495072975681097930> Robux  
+• <:Discord:1507110676991053930> Members  
+• <:TikTok:1495102970302304357> Followers  
+
+### 🎫 Para comprar alguno de nuestros productos:
+Abre un ticket en <#1494779889209835580>
+    `)
+
+    .setFooter({
+        text: 'Exodial Stock'
+    });
 
     const shopMenu = new StringSelectMenuBuilder()
 
