@@ -293,7 +293,7 @@ if (vouchChannel) {
 
         .setColor('#5865F2')
 
-        .setTitle('💬 Make A Vouch | Exodial Stock')
+        .setTitle('<a:Voidyes:1495087864692867124> Make A Vouch | Exodial Stock')
 
         .setThumbnail(client.user.displayAvatarURL())
 
@@ -301,14 +301,14 @@ if (vouchChannel) {
 > ¿Compraste algo con nosotros?
 > ¡Comparte tu experiencia con Exodial Stock!
 
-## 🌟 ¿Cómo funciona?
+## <a:star:1507155414343745607> ¿Cómo funciona?
 
 ➜ Presiona el botón de abajo  
 ➜ Completa el formulario  
-➜ Tu review será enviada automáticamente  
+➜ Tu review será enviada automáticamente. <a:Voidyes:1495087864692867124>  
 
-### 💙 Tu opinión nos ayuda a mejorar.
-        `)
+💙 Tu opinión nos ayuda a mejorar.
+`)
 
         .setFooter({
             text: 'Exodial Stock • Vouch System'
@@ -321,7 +321,7 @@ if (vouchChannel) {
             new ButtonBuilder()
                 .setCustomId('make_vouch')
                 .setLabel('Make A Vouch')
-                .setEmoji('💬')
+                .setEmoji('1507155414343745607')
                 .setStyle(ButtonStyle.Primary)
         );
 
@@ -1092,7 +1092,7 @@ if (interaction.customId === 'vouch_modal') {
 
     const reviewChannel = client.channels.cache.get('1495249862965329980');
 
-    const starsDisplay = '⭐'.repeat(Number(stars));
+    const starsDisplay = '<a:star:1507155414343745607>'.repeat(Number(stars));
 
     const embed = new EmbedBuilder()
 
@@ -1102,16 +1102,17 @@ if (interaction.customId === 'vouch_modal') {
 
         .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
 
-        .setDescription(`
-> **Estado:** ✅ Aprobado
-> **Usuario:** ${interaction.user}
+.setDescription(`
+> **Estado:** <a:Voidyes:1495087864692867124> Aprobado
+> **Enviado por:** ${interaction.user}
 > **Calificación:** ${starsDisplay}
 
-### ✨ Vouch:
+## <a:star:1507155414343745607> Vouch:
+
 \`\`\`
 ${vouch}
 \`\`\`
-        `)
+`)
 
         .setFooter({
             text: `Exodial Stock • ${interaction.user.username}`
