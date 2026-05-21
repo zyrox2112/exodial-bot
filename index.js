@@ -215,16 +215,16 @@ if (shopChannel) {
 > *Aceptamos todo tipo de Metodos De Pago, universalmente Crypto y PayPal fyf*
 ## 🛍️ Nuestros productos:
 
-• <a:NITRO:1495072973449592933> Nitro Boost / Basic
-• <:Netflix6:1495087858778902548> Streaming  Todo Tipo
-• <a:server_boost:1495072978860245103> Server Boosts  1M / 3M
-• <:Deco:1507110765600047196> Decorations
-• <a:Robux:1495072975681097930> Robux  Via Gamepass
-• <:TikTok:1495102970302304357> Followers  Ig/TikTok
-• <:Discord:1507110676991053930> Members  On/Off
+• <a:NITRO:1495072973449592933> __Nitro | Boost / Basic__
+• <:Netflix6:1495087858778902548> __Streaming | Todo Tipo__
+• <a:server_boost:1495072978860245103> __Server Boosts | 1M / 3M__
+• <:Deco:1507110765600047196> __Decorations__
+• <a:Robux:1495072975681097930> __Robux | Via Gamepass__
+• <:TikTok:1495102970302304357> __Followers | Ig/TikTok__
+• <:Discord:1507110676991053930> __Members | On/Off__
 
 ### 🎫 Para comprar alguno de nuestros diversos productos:
-Por favor, abra un ticket en <#1494779889209835580>
+*Por favor, abra un ticket en* <#1494779889209835580>
     `)
 
     .setFooter({
