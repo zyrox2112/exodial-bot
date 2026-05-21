@@ -17,7 +17,7 @@ const {
     ModalBuilder,
     TextInputBuilder,
     TextInputStyle,
-
+    StringSelectMenuBuilder,
     SlashCommandBuilder,
     REST,
     Routes,
@@ -612,7 +612,176 @@ Sistema de gestión para **${config.serverName}**
             return interaction.reply(`✅ Apodo cambiado.`);
         }
     }
+if (interaction.isStringSelectMenu()) {
 
+    if (interaction.customId === 'shop_menu') {
+
+        let embed;
+
+        if (interaction.values[0] === 'nitro') {
+
+            embed = new EmbedBuilder()
+
+                .setColor(config.color)
+
+                .setTitle('<a:NITRO:1495072973449592933> Nitro')
+
+                .setDescription(`
+<a:NITRO:1495072973449592933> Nitro Boost FW = 3.50$
+
+<a:NITRO:1495072973449592933> Nitro Basic FW = 1$ Aprox
+
+🎫 Abrir ticket:
+<#1494779889209835580>
+                `);
+        }
+
+        if (interaction.values[0] === 'streaming') {
+
+            embed = new EmbedBuilder()
+
+                .setColor(config.color)
+
+                .setTitle('<:Netflix6:1495087858778902548> Streaming')
+
+                .setDescription(`
+<:unnamed:1495079713809629345> Disney+ = 0.40$
+
+<:Netflix6:1495087858778902548> Netflix = 0.35$
+
+<:7415crunchyroll:1495079712655937609> Crunchyroll = 0.50$
+
+🏆 UFC = 0.25$
+
+🏀 NBA = 0.25$
+
+💥 WWE = 0.20$
+
+<:steam:1495079714526597240> Steam Fresh Acc = 0.25$
+
+<:62970hbomax:1495079711422812241> HBO Max = 0.60$
+
+<:26439amazonprime:1495087860318077231> Amazon Prime Video = 0.50$
+
+<:Spotify:1495087865791512819> Spotify Premium Key 12m = 1$ - 3$
+
+<:Spotify:1495087865791512819> Spotify Premium FA Acc 12m = 2$
+
+📺 Paramount = 0.50$
+
+🎫 Abrir ticket:
+<#1494779889209835580>
+                `);
+        }
+
+        if (interaction.values[0] === 'boosts') {
+
+            embed = new EmbedBuilder()
+
+                .setColor(config.color)
+
+                .setTitle('<a:server_boost:1495072978860245103> Server Boosts')
+
+                .setDescription(`
+<a:server_boost:1495072978860245103> 1 Month Server Boosts: x14 Boosts = 4.50$
+
+<a:server_boost:1495072978860245103> 3 Month Server Boosts: x14 Boosts = 6.50$
+
+🎫 Abrir ticket:
+<#1494779889209835580>
+                `);
+        }
+
+        if (interaction.values[0] === 'decorations') {
+
+            embed = new EmbedBuilder()
+
+                .setColor(config.color)
+
+                .setTitle('<:Deco:1507110765600047196> Decorations')
+
+                .setDescription(`
+<:Deco:1507110765600047196> 4.99€ → 1.80$
+
+<:Deco:1507110765600047196> 5.99€ → 1.90$
+
+<:Deco:1507110765600047196> 6.99€ → 2.10$
+
+<:Deco:1507110765600047196> 7.99€ → 2.25$
+
+<:Deco:1507110765600047196> 8.49€ → 3.20$
+
+<:Deco:1507110765600047196> 9.99€ → 3.65$
+
+<:Deco:1507110765600047196> 11.99€ → 3.90$
+
+🎫 Abrir ticket:
+<#1494779889209835580>
+                `);
+        }
+
+        if (interaction.values[0] === 'robux') {
+
+            embed = new EmbedBuilder()
+
+                .setColor(config.color)
+
+                .setTitle('<a:Robux:1495072975681097930> Robux')
+
+                .setDescription(`
+<a:Robux:1495072975681097930> 1k Robux Leg4l Pa1d Via Gamepass = 6.5$
+
+<a:Robux:1495072975681097930> Robux Panel = 6.60$
+
+🎫 Abrir ticket:
+<#1494779889209835580>
+                `);
+        }
+
+        if (interaction.values[0] === 'members') {
+
+            embed = new EmbedBuilder()
+
+                .setColor(config.color)
+
+                .setTitle('<:Discord:1507110676991053930> Miembros')
+
+                .setDescription(`
+<:Discord:1507110676991053930> 1k Miembros Offline = 1.20$
+
+<:Discord:1507110676991053930> 1k Miembros Online = 2.00$
+
+🎫 Abrir ticket:
+<#1494779889209835580>
+                `);
+        }
+
+        if (interaction.values[0] === 'followers') {
+
+            embed = new EmbedBuilder()
+
+                .setColor(config.color)
+
+                .setTitle('<:TikTok:1495102970302304357> Followers')
+
+                .setDescription(`
+<:TikTok:1495102970302304357> 1000 Followers TikTok = 2.50$
+
+<:ig:1507110723321598043> 1000 Followers Instagram = 1$
+
+🎫 Abrir ticket:
+<#1494779889209835580>
+                `);
+        }
+
+        return interaction.reply({
+
+            embeds: [embed],
+
+            ephemeral: true
+        });
+    }
+}
     if (interaction.isButton()) {
 
         if (
