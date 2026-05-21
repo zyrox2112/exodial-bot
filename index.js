@@ -203,30 +203,30 @@ if (shopChannel) {
 
     .setColor('#5865F2')
 
-    .setTitle('🛒 Exodial Stock | Products')
+    .setTitle('🛒 Exodial Stock | All Products')
 
     .setThumbnail(client.user.displayAvatarURL())
 
     .setDescription(`
-> ¡Bienvenido a nuestro catálogo de productos!
-> Descubre nuestra variedad de productos disponibles.
-
+> ¡Bienvenido/a a nuestro catálogo de productos, en el que podras ver todo acerca de nuestra tienda!
+> Descubre nuestra variedad de productos disponibles y sus respectivos precios.
+> Aceptamos todo tipo de Metodos De Pago, universalmente Crypto y PayPal fyf
 ## 🛍️ Nuestros productos:
 
-• <a:NITRO:1495072973449592933> Nitro  
-• <:Netflix6:1495087858778902548> Streaming  
-• <a:server_boost:1495072978860245103> Server Boosts  
-• <:Deco:1507110765600047196> Decorations  
-• <a:Robux:1495072975681097930> Robux  
-• <:Discord:1507110676991053930> Members  
-• <:TikTok:1495102970302304357> Followers  
+• <a:NITRO:1495072973449592933> Nitro Boost / Basic
+• <:Netflix6:1495087858778902548> Streaming  Todo Tipo
+• <a:server_boost:1495072978860245103> Server Boosts  1M / 3M
+• <:Deco:1507110765600047196> Decorations
+• <a:Robux:1495072975681097930> Robux  Via Gamepass
+• <:TikTok:1495102970302304357> Followers  Ig/TikTok
+• <:Discord:1507110676991053930> Members  On/Off
 
-### 🎫 Para comprar alguno de nuestros productos:
-Abre un ticket en <#1494779889209835580>
+### 🎫 Para comprar alguno de nuestros diversos productos:
+Por favor, abra un ticket en <#1494779889209835580>
     `)
 
     .setFooter({
-        text: 'Exodial Stock'
+        text: 'Exodial Stock, By exo.'
     });
 
     const shopMenu = new StringSelectMenuBuilder()
