@@ -40,7 +40,7 @@ const client = new Client({
 });
 
 let ticketCounter = 1;
-
+let vouchCounter = 1;
 const slashCommands = [
 
     new SlashCommandBuilder()
@@ -285,6 +285,53 @@ if (shopChannel) {
 
         components: [shopRow]
     });
+    const vouchChannel = client.channels.cache.get('1507151720096993430');
+
+if (vouchChannel) {
+
+    const vouchEmbed = new EmbedBuilder()
+
+        .setColor('#5865F2')
+
+        .setTitle('💬 Make A Vouch | Exodial Stock')
+
+        .setThumbnail(client.user.displayAvatarURL())
+
+        .setDescription(`
+> ¿Compraste algo con nosotros?
+> ¡Comparte tu experiencia con Exodial Stock!
+
+## 🌟 ¿Cómo funciona?
+
+➜ Presiona el botón de abajo  
+➜ Completa el formulario  
+➜ Tu review será enviada automáticamente  
+
+### 💙 Tu opinión nos ayuda a mejorar.
+        `)
+
+        .setFooter({
+            text: 'Exodial Stock • Vouch System'
+        });
+
+    const row = new ActionRowBuilder()
+
+        .addComponents(
+
+            new ButtonBuilder()
+                .setCustomId('make_vouch')
+                .setLabel('Make A Vouch')
+                .setEmoji('💬')
+                .setStyle(ButtonStyle.Primary)
+        );
+
+    await vouchChannel.send({
+
+        embeds: [vouchEmbed],
+
+        components: [row]
+    });
+}
 }
 });
 
@@ -874,7 +921,46 @@ if (interaction.isStringSelectMenu()) {
     }
 }
     if (interaction.isButton()) {
+if (interaction.customId === 'make_vouch') {
 
+    const modal = new ModalBuilder()
+
+        .setCustomId('vouch_modal')
+
+        .setTitle('Make A Vouch | Exodial Stock');
+
+    const vouchInput = new TextInputBuilder()
+
+        .setCustomId('vouch_text')
+
+        .setLabel('Escribe tu Vouch')
+
+        .setStyle(TextInputStyle.Paragraph)
+
+        .setPlaceholder('Escribe tu experiencia con Exodial Stock')
+
+        .setRequired(true);
+
+    const starsInput = new TextInputBuilder()
+
+        .setCustomId('vouch_stars')
+
+        .setLabel('Stars (1-5)')
+
+        .setStyle(TextInputStyle.Short)
+
+        .setPlaceholder('5')
+
+        .setRequired(true);
+
+    const row1 = new ActionRowBuilder().addComponents(vouchInput);
+
+    const row2 = new ActionRowBuilder().addComponents(starsInput);
+
+    modal.addComponents(row1, row2);
+
+    return interaction.showModal(modal);
+}
         if (
             interaction.customId === 'ticket_compra' ||
             interaction.customId === 'ticket_soporte' ||
@@ -998,7 +1084,52 @@ if (interaction.isStringSelectMenu()) {
     }
 
     if (interaction.isModalSubmit()) {
+if (interaction.customId === 'vouch_modal') {
 
+    const vouch = interaction.fields.getTextInputValue('vouch_text');
+
+    const stars = interaction.fields.getTextInputValue('vouch_stars');
+
+    const reviewChannel = client.channels.cache.get('1495249862965329980');
+
+    const starsDisplay = '⭐'.repeat(Number(stars));
+
+    const embed = new EmbedBuilder()
+
+        .setColor('#5865F2')
+
+        .setTitle('💬 Nuevo Vouch | Exodial Stock')
+
+        .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
+
+        .setDescription(`
+> **Estado:** ✅ Aprobado
+> **Usuario:** ${interaction.user}
+> **Calificación:** ${starsDisplay}
+
+### ✨ Vouch:
+\`\`\`
+${vouch}
+\`\`\`
+        `)
+
+        .setFooter({
+            text: `Exodial Stock • ${interaction.user.username}`
+        })
+
+        .setTimestamp();
+
+    await reviewChannel.send({
+        embeds: [embed]
+    });
+
+    return interaction.reply({
+
+        content: '✅ Tu vouch fue enviado correctamente.',
+
+        ephemeral: true
+    });
+}
         const type = interaction.customId.replace('modal_', '');
 
         const q1 = interaction.fields.getTextInputValue('q1');
