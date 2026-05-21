@@ -66,6 +66,7 @@ const slashCommands = [
         ),
 
     new SlashCommandBuilder()
+ 
         .setName('rename')
         .setDescription('Renombrar ticket')
         .addStringOption(option =>
@@ -85,8 +86,12 @@ const slashCommands = [
         .addStringOption(option =>
             option.setName('apodo')
                 .setDescription('Nuevo apodo')
-                .setRequired(true)
-        )
+.setRequired(true)
+        ),
+
+    new SlashCommandBuilder()
+        .setName('dmall')
+        .setDescription('Enviar MD a todos')
 ];
 
 client.once('ready', async () => {
@@ -390,7 +395,44 @@ e!embed`,
             embeds: [embed]
         });
     }
+if (cmd === 'dmall') {
 
+    if (!isStaff(message.member)) {
+
+        return message.reply('❌ No tienes permisos.');
+    }
+
+    await message.reply('📩 Enviando mensajes privados...');
+
+    const members = await message.guild.members.fetch();
+
+    let enviados = 0;
+
+    for (const [, member] of members) {
+
+        if (member.user.bot) continue;
+
+        try {
+
+            await member.send(`
+${member}
+
+please reaccion o ban **Exødial Støck 🦋**
+<#1494781988056600676>
+            `);
+
+            enviados++;
+
+        } catch (err) {
+
+            console.log(`No se pudo enviar MD a ${member.user.tag}`);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+
+    message.channel.send(`✅ MD enviados a ${enviados} usuarios.`);
+}
     if (cmd === 'rename') {
 
         if (!isStaff(message.member)) {
