@@ -765,9 +765,9 @@ if (interaction.isStringSelectMenu()) {
                 .setTitle('<a:NITRO:1495072973449592933> Nitro')
 
                 .setDescription(`
-<a:NITRO:1495072973449592933> Nitro Boost FW = 3.50$
+<a:NITRO:1495072973449592933> Nitro Boost FW = 4$
 
-<a:NITRO:1495072973449592933> Nitro Basic FW = 1$ Aprox
+<a:NITRO:1495072973449592933> Nitro Basic FW = 1.50$ Aprox
 
 🎫 Abrir ticket:
 <#1494779889209835580>
@@ -783,29 +783,31 @@ if (interaction.isStringSelectMenu()) {
                 .setTitle('<:Netflix6:1495087858778902548> Streaming')
 
                 .setDescription(`
-<:unnamed:1495079713809629345> Disney+ = 0.40$
+<:unnamed:1495079713809629345> Disney+ = 3$
 
-<:Netflix6:1495087858778902548> Netflix = 0.35$
+<:Netflix6:1495087858778902548> Netflix = 3$
 
-<:7415crunchyroll:1495079712655937609> Crunchyroll = 0.50$
+<:7415crunchyroll:1495079712655937609> Crunchyroll = 3$
 
 🏆 UFC = 0.25$
 
 🏀 NBA = 0.25$
 
-💥 WWE = 0.20$
+💥 WWE = 0.25$
 
 <:steam:1495079714526597240> Steam Fresh Acc = 0.25$
 
-<:62970hbomax:1495079711422812241> HBO Max = 0.60$
+<:62970hbomax:1495079711422812241> HBO Max = 1.50$
 
-<:26439amazonprime:1495087860318077231> Amazon Prime Video = 0.50$
+<:26439amazonprime:1495087860318077231> Amazon Prime Video = 4$
 
 <:Spotify:1495087865791512819> Spotify Premium Key 12m = 1$ - 3$
 
-<:Spotify:1495087865791512819> Spotify Premium FA Acc 12m = 2$
+<:Spotify:1495087865791512819> Spotify Premium FA Acc 12m = 5$
 
-📺 Paramount = 0.50$
+Youtube Premium = 3$
+
+📺 Paramount = 3$
 
 🎫 Abrir ticket:
 <#1494779889209835580>
@@ -823,7 +825,7 @@ if (interaction.isStringSelectMenu()) {
                 .setDescription(`
 <a:server_boost:1495072978860245103> 1 Month Server Boosts: x14 Boosts = 4.50$
 
-<a:server_boost:1495072978860245103> 3 Month Server Boosts: x14 Boosts = 6.50$
+<a:server_boost:1495072978860245103> 3 Month Server Boosts: x14 Boosts = 10$
 
 🎫 Abrir ticket:
 <#1494779889209835580>
@@ -903,9 +905,9 @@ if (interaction.isStringSelectMenu()) {
                 .setTitle('<:TikTok:1495102970302304357> Followers')
 
                 .setDescription(`
-<:TikTok:1495102970302304357> 1000 Followers TikTok = 2.50$
+<:TikTok:1495102970302304357> 1000 Followers TikTok 30d Refill Included = 7$
 
-<:ig:1507110723321598043> 1000 Followers Instagram = 1$
+<:ig:1507110723321598043> 1000 Followers Instagram = 1.50$
 
 🎫 Abrir ticket:
 <#1494779889209835580>
